@@ -1,0 +1,15 @@
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/FinalAutonomousOpMode_Smartgears.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- TeamCode/src/main/java/org/firstinspires/ftc/teamcode/FinalAutonomousOpMode_Smartgears.java	(date 1543276113000)
++++ TeamCode/src/main/java/org/firstinspires/ftc/teamcode/FinalAutonomousOpMode_Smartgears.java	(date 1543276276225)
+@@ -165,4 +165,4 @@
+     }
+ }
+ 
+-//f
+\ No newline at end of file
++//fina
+\ No newline at end of file
