@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name = "FinalOpMode_Smartgears", group = "pushbot")
+@Autonomous(name = "FinalOpMode_TF", group = "pushbot")
 //@disabled
 public class AutonomousVFtests extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -213,7 +213,7 @@ public class AutonomousVFtests extends LinearOpMode {
 //    }
     public void landing() {
         hangArm.setPower(1);
-        sleep(10560);
+        sleep(10060);
         hangArm.setPower(0);
         leftClaw.setPosition(0);
         rightClaw.setPosition(0);
@@ -266,6 +266,7 @@ public class AutonomousVFtests extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                   long startTime = System.currentTimeMillis();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         if (updatedRecognitions.size() == 3) {
@@ -281,12 +282,32 @@ public class AutonomousVFtests extends LinearOpMode {
                                     silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if ((goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) || System.currentTimeMillis() > (startTime + 15000)  ) {
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
+                                    frontRight.setPower(1);
+                                    rightDrive.setPower(1);
+                                    sleep(1500);
+                                    leftDrive.setPower(1);
+                                    frontLeft.setPower(1);
+                                    sleep(2000);
+                                    leftDrive.setPower(0);
+                                    rightDrive.setPower(0);
+                                    frontLeft.setPower(0);
+                                    frontRight.setPower(0);
 
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
+                                    frontLeft.setPower(1);
+                                    leftDrive.setPower(1);
+                                    sleep(1500);
+                                    rightDrive.setPower(1);
+                                    frontRight.setPower(1);
+                                    sleep(2000);
+                                    leftDrive.setPower(0);
+                                    rightDrive.setPower(0);
+                                    frontLeft.setPower(0);
+                                    frontRight.setPower(0);
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     leftDrive.setPower(1);
@@ -299,6 +320,7 @@ public class AutonomousVFtests extends LinearOpMode {
                                     frontRight.setPower(0);
                                     leftDrive.setPower(0);
                                 }
+
                             }
                         }
                         telemetry.update();
