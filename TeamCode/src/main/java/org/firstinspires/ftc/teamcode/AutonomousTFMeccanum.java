@@ -1,0 +1,340 @@
+package org.firstinspires.ftc.teamcode;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.List;
+
+//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+@Autonomous(name = "FinalOpMode_TF", group = "pushbot")
+//@disabled
+public class AutonomousTFMeccanum extends LinearOpMode {
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
+    DcMotor leftBDrive;
+    DcMotor rightBDrive;
+    DcMotor leftFDrive;
+    DcMotor rightFDrive;
+    DcMotor hangArm;
+    //DcMotor grabArm;
+
+    private static final String VUFORIA_KEY = "AZIw/h7/////AAABmXKlSvHFWEmwgei9zqbumhM1qDUxa8CfKM23a6LkPjsEaKSiLGjSRnvaqHDR2Gw3NYrbYN/kidMjhYFjBi8Bs5wzNLGa8NDKsIle5F/bN6xzmBqYFV7kj8OGOHm6EuBGXynM06Zs4Ufzioyqo1U1QQ1cMHgNo4q/y2+QxtJ/itFhYV9DDuqJhC8UFW2nQb6xCao6UultNNRJ19e0qaOLVr346bytP6CPyVoDCdGDD18W3t+mMlyyYhwaIZEqQwUhAtaRQmYUWAVonphDjpHQVaSJVQ+DKfk2+8rxPQUm81bvgde46L73zmXSD8ZzZ6xdavISEbkz0CEaP9IwIO/hz85lOIFkgRM4Yb6MniRFTGdH";
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+        hangArm = hardwareMap.get(DcMotor.class, "hang_arm");
+
+        leftBDrive = hardwareMap.get(DcMotor.class, "left_bdrive");
+        rightBDrive = hardwareMap.get(DcMotor.class, "right_bdrive");
+        leftFDrive = hardwareMap.get(DcMotor.class, "left_fdrive");
+        rightFDrive = hardwareMap.get(DcMotor.class, "right_fdrive");
+        //grabArm = hardwareMap.get(DcMotor.class, "grab_arm");
+        rightBDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFDrive.setDirection(DcMotor.Direction.REVERSE);
+        hangArm.setDirection(DcMotor.Direction.REVERSE);
+        initVuforia();
+
+
+        int motorPower = 1;
+        long motorTimeValue = 1000;
+
+
+        waitForStart();
+        landing();
+        TFsampling();
+
+
+    }
+
+//    public void MoveForward(double motorPower, long motorTimeValue) throws InterruptedException {
+//        leftDrive.setPower(motorPower);
+//        rightDrive.setPower(-motorPower);
+//        Thread.sleep(motorTimeValue);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//    }
+//
+//    public void TurnRight(double motorPower, long motorTimeValue) throws InterruptedException {
+//        leftDrive.setPower(motorPower);
+//        rightDrive.setPower(motorPower);
+//        Thread.sleep(motorTimeValue);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//    }
+//
+//    public void TurnLeft(double motorPower, long motorTimeValue) throws InterruptedException {
+//        leftDrive.setPower(-motorPower);
+//        rightDrive.setPower(-motorPower);
+//        Thread.sleep(motorTimeValue);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//    }
+//
+//    public void MoveBackward(double motorPower, long motorTimeValue) throws InterruptedException {
+//        leftDrive.setPower(-motorPower);
+//        rightDrive.setPower(-motorPower);
+//        Thread.sleep(motorTimeValue);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//    }
+
+
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = CameraDirection.BACK;
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+    //    public void Landing(){
+////        telemetry.addData("Status", "Performing Landing Operation");
+////        liftArm.setPower(1);
+////        sleep(12000);
+////        liftArm.setPower(0);
+////        rightClaw.setPosition(0);
+////        leftClaw.setPosition(0);
+////        leftDrive.setPower(-1);
+////        rightDrive.setPower(-1);
+////        sleep(1500);
+////        leftDrive.setPower(0);
+////        rightDrive.setPower(0);
+////        telemetry.update();
+//        liftArm.setPower(1);
+//        sleep(17000);
+//        liftArm.setPower(0);
+//        leftClaw.setPosition(0);
+//        rightClaw.setPosition(0);
+//        rightDrive.setPower(-1);
+//        leftDrive.setPower(-1);
+//        sleep(2300);
+//        leftDrive.setPower(0.25);
+//        rightDrive.setPower(0.25);
+//        sleep(550);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//
+//    }
+//    public void Sampling() {
+////        telemetry.addData("Status", "Performing Sampling Operation");
+////        leftDrive.setPower(-1);
+////        rightDrive.setPower(-1);
+////        sleep(1000);
+////        leftDrive.setPower(0);
+////        rightDrive.setPower(0);
+////        telemetry.update();
+//        liftArm.setPower(1);
+//        sleep(17000);
+//        liftArm.setPower(0);
+//        leftClaw.setPosition(0);
+//        rightClaw.setPosition(0);
+//        rightDrive.setPower(-1);
+//        leftDrive.setPower(-1);
+//        sleep(2300);
+//        leftDrive.setPower(0.25);
+//        rightDrive.setPower(0.25);
+//        sleep(550);
+//        leftDrive.setPower(0);
+//        rightDrive.setPower(0);
+//        }
+//    public void Claiming(){
+////         leftDrive.setPower(1);
+////         sleep(700);
+////         rightDrive.setPower(1);
+////         sleep(1850);
+////         rightDrive.setPower(0);
+////         leftDrive.setPower(0);
+////         claimArm.setPower(.7);
+////         sleep(1200);
+////       claimArm.setPower(0);
+//        rightDrive.setPower(1);
+//        leftDrive.setPower(-1);
+//        sleep(925);
+//        leftDrive.setPower(.7);
+//        sleep(1750);
+//        rightDrive.setPower(0);
+//        leftDrive.setPower(0);
+//    }
+//   public void Parking(){
+//    leftDrive.setPower(1);
+//    rightDrive.setPower(1);
+//    sleep(750);
+//       leftDrive.setPower(1);
+//       rightDrive.setPower(.95);
+//       sleep(2000);
+//       leftDrive.setPower(0);
+//       rightDrive.setPower(0);
+//    }
+//   public void armTest(){
+////       claimArm.setPower(-1);
+////       sleep(700);
+////       claimArm.setPower(0);
+////        claimArm.setPower(1);
+////        sleep(700);
+////        claimArm.setPower(0);
+//    }
+    public void landing() {
+        hangArm.setPower(1);
+        sleep(1790);
+        hangArm.setPower(0);
+        leftFDrive.setPower(-0.5);
+        leftBDrive.setPower(0.5);
+        rightFDrive.setPower(0.5);
+        rightBDrive.setPower(-0.5);
+        sleep(2350);
+        leftFDrive.setPower(0);
+        leftBDrive.setPower(0);
+        rightFDrive.setPower(0);
+        rightBDrive.setPower(0);
+    }
+
+    //public void sampling() {
+//        leftDrive.setPower(.9);
+//        rightDrive.setPower(1);
+//        sleep(2750);
+//        leftBDrive.setPower(0);
+//        rightDrive.setPower(0);
+//        //grabArm.setPower(.75);
+//        sleep(7500);
+//        //grabArm.setPower(0);
+//    }
+
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    public void TFsampling() {
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
+        /** Wait for the game to begin */
+        telemetry.addData(">", "Press Play to start tracking");
+        telemetry.update();
+        waitForStart();
+        if (opModeIsActive()) {
+            /** Activate Tensor Flow Object Detection. */
+            if (tfod != null) {
+                tfod.activate();
+            }
+            while (opModeIsActive()) {
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                   long startTime = System.currentTimeMillis();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        if(System.currentTimeMillis() > (startTime + 10000)){
+                            telemetry.addData("# Object not detected within 10 seconds..", -1);
+                            telemetry.update();
+                            leftBDrive.setPower(1);
+                            rightBDrive.setPower(1);
+                            leftFDrive.setPower(1);
+                            rightFDrive.setPower(1);
+                            sleep(4000);
+                            rightBDrive.setPower(0);
+                            leftFDrive.setPower(0);
+                            rightFDrive.setPower(0);
+                            leftBDrive.setPower(0);
+                        }
+                        if (updatedRecognitions.size() == 3) {
+                            int goldMineralX = -1;
+                            int silverMineral1X = -1;
+                            int silverMineral2X = -1;
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+                                } else {
+                                    silverMineral2X = (int) recognition.getLeft();
+                                }
+                            }
+                            if ((goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) ) {
+                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Left");
+                                    rightFDrive.setPower(1);
+                                    rightBDrive.setPower(1);
+                                    sleep(1500);
+                                    leftBDrive.setPower(1);
+                                    leftFDrive.setPower(1);
+                                    sleep(2000);
+                                    leftBDrive.setPower(0);
+                                    rightBDrive.setPower(0);
+                                    leftFDrive.setPower(0);
+                                    rightFDrive.setPower(0);
+          //                          grabArm.setPower(.45);
+                                    sleep(1000);
+            //                        grabArm.setPower(0);
+
+                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Right");
+                                    leftFDrive.setPower(1);
+                                    leftBDrive.setPower(1);
+                                    sleep(1500);
+                                    rightBDrive.setPower(1);
+                                    rightFDrive.setPower(1);
+                                    sleep(2000);
+                                    leftBDrive.setPower(0);
+                                    rightBDrive.setPower(0);
+                                    leftFDrive.setPower(0);
+                                    rightFDrive.setPower(0);
+              //                      grabArm.setPower(.45);
+                                    sleep(1000);
+                //                    grabArm.setPower(0);
+                                } else {
+                                    telemetry.addData("Gold Mineral Position", "Center");
+                                    leftBDrive.setPower(1);
+                                    rightBDrive.setPower(1);
+                                    leftFDrive.setPower(1);
+                                    rightFDrive.setPower(1);
+                                    sleep(4000);
+                                    rightBDrive.setPower(0);
+                                    leftFDrive.setPower(0);
+                                    rightFDrive.setPower(0);
+                                    leftBDrive.setPower(0);
+                  //                  grabArm.setPower(.45);
+                                    sleep(1000);
+                    //                grabArm.setPower(0);
+                                }
+
+                            }
+                        }
+                        telemetry.update();
+                    }
+                }
+            }
+        }
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+    }
+}
+
+
+//finaa
