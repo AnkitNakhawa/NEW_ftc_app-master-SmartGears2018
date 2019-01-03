@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -15,7 +16,7 @@ import java.util.List;
 
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Autonomous(name = "FinalOpMode_TF", group = "pushbot")
+@Autonomous(name = "FinalOpMode_TFMeccanum", group = "pushbot")
 //@disabled
 public class AutonomousTFMeccanum extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -28,6 +29,9 @@ public class AutonomousTFMeccanum extends LinearOpMode {
     DcMotor rightFDrive;
     DcMotor hangArm;
     //DcMotor grabArm;
+     Servo phone;
+     Servo leftArm;
+     Servo rightArm;
 
     private static final String VUFORIA_KEY = "AZIw/h7/////AAABmXKlSvHFWEmwgei9zqbumhM1qDUxa8CfKM23a6LkPjsEaKSiLGjSRnvaqHDR2Gw3NYrbYN/kidMjhYFjBi8Bs5wzNLGa8NDKsIle5F/bN6xzmBqYFV7kj8OGOHm6EuBGXynM06Zs4Ufzioyqo1U1QQ1cMHgNo4q/y2+QxtJ/itFhYV9DDuqJhC8UFW2nQb6xCao6UultNNRJ19e0qaOLVr346bytP6CPyVoDCdGDD18W3t+mMlyyYhwaIZEqQwUhAtaRQmYUWAVonphDjpHQVaSJVQ+DKfk2+8rxPQUm81bvgde46L73zmXSD8ZzZ6xdavISEbkz0CEaP9IwIO/hz85lOIFkgRM4Yb6MniRFTGdH";
     private VuforiaLocalizer vuforia;
@@ -42,6 +46,9 @@ public class AutonomousTFMeccanum extends LinearOpMode {
         rightBDrive = hardwareMap.get(DcMotor.class, "right_bdrive");
         leftFDrive = hardwareMap.get(DcMotor.class, "left_fdrive");
         rightFDrive = hardwareMap.get(DcMotor.class, "right_fdrive");
+        phone = hardwareMap.get(Servo.class, "phone");
+        leftArm = hardwareMap.get(Servo.class, "left_arm");
+        rightArm = hardwareMap.get(Servo.class, "right_arm");
         //grabArm = hardwareMap.get(DcMotor.class, "grab_arm");
         rightBDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -56,7 +63,9 @@ public class AutonomousTFMeccanum extends LinearOpMode {
 
         waitForStart();
         landing();
-        TFsampling();
+        //TFsampling();
+        parking();
+
 
 
     }
@@ -205,6 +214,19 @@ public class AutonomousTFMeccanum extends LinearOpMode {
         leftBDrive.setPower(0);
         rightFDrive.setPower(0);
         rightBDrive.setPower(0);
+    }
+    public void parking(){
+        leftBDrive.setPower(1);
+        leftFDrive.setPower(1);
+        rightBDrive.setPower(1);
+        rightFDrive.setPower(1);
+        sleep(2500);
+        leftBDrive.setPower(0);
+        leftFDrive.setPower(0);
+        rightBDrive.setPower(0);
+        rightFDrive.setPower(0);
+        rightArm.setPosition(-1);
+        leftArm.setPosition(0);
     }
 
     //public void sampling() {
