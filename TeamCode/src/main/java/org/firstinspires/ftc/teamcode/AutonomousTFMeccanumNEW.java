@@ -84,13 +84,13 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
 
     public void landing() {
         hangArm.setPower(-1);
-        sleep(9250);
+        sleep(9450);
         hangArm.setPower(0);
         leftFDrive.setPower(0.3);
         leftBDrive.setPower(-0.3);
-        rightFDrive.setPower(-.3);
+        rightFDrive.setPower(-0.3);
         rightBDrive.setPower(0.3);
-        sleep(500);
+        sleep(600);
         leftFDrive.setPower(0);
         leftBDrive.setPower(0);
         rightFDrive.setPower(0);
@@ -98,16 +98,45 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
         hangArm.setPower(1);
         sleep(3000);
         hangArm.setPower(0);
-        rightBDrive.setPower(-.3);
-        rightFDrive.setPower(-.3);
-        sleep(350);
-        leftFDrive.setPower(.3);
-        leftBDrive.setPower(.3);
-        sleep(200);
+        //Seperation
+        rightFDrive.setPower(-.25);
+        rightBDrive.setPower(-.25);
+        leftFDrive.setPower(-.2);
+        leftBDrive.setPower(-.2);
+        sleep(250);
         leftFDrive.setPower(0);
         leftBDrive.setPower(0);
         rightFDrive.setPower(0);
         rightBDrive.setPower(0);
+
+//        rightFDrive.setPower(-.25);
+//        rightBDrive.setPower(-.25);
+//        leftBDrive.setPower(.25);
+//        leftFDrive.setPower(.25);
+//        sleep(450);
+//        leftFDrive.setPower(0);
+//        leftBDrive.setPower(0);
+//        rightFDrive.setPower(0);
+//        rightBDrive.setPower(0);
+//        rightBDrive.setPower(0);
+//        rightFDrive.setPower(0);
+//        leftFDrive.setPower(-.25);
+//        leftBDrive.setPower(-.25);
+//        sleep(250);
+//        leftBDrive.setPower(0);
+//        leftFDrive.setPower(0);
+
+    }
+//        rightBDrive.setPower(-.3);
+//        rightFDrive.setPower(-.3);
+//        sleep(350);
+//        leftFDrive.setPower(.3);
+//        leftBDrive.setPower(.3);
+//        sleep(100);
+//        leftFDrive.setPower(0);
+//        leftBDrive.setPower(0);
+//        rightFDrive.setPower(0);
+//        rightBDrive.setPower(0);
 
         //        leftFDrive.setPower(-0.5);
 //        leftBDrive.setPower(0.5);
@@ -123,7 +152,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
 //        sleep(1000);
 //        rightBDrive.setPower(0);
 //        rightFDrive.setPower(0);
-    }
+
     public void parking(){
         leftBDrive.setPower(1);
         leftFDrive.setPower(1);
@@ -188,15 +217,20 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                             if ((goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) ) {
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
-                                    leftFDrive.setPower(-.5);
-                                    leftBDrive.setPower(-.5);
-                                    rightFDrive.setPower(.3);
-                                    rightBDrive.setPower(.3);
+                                    leftFDrive.setPower(.2);
+                                    leftBDrive.setPower(.2);
+                                    rightFDrive.setPower(.2);
+                                    rightBDrive.setPower(.2);
+                                    sleep(450);
+                                    leftFDrive.setPower(-.4);
+                                    leftBDrive.setPower(-.4);
+                                    rightFDrive.setPower(.2);
+                                    rightBDrive.setPower(.2);
                                     hangArm.setPower(1);
-                                    sleep(300);
-                                    leftFDrive.setPower(.3);
-                                    leftBDrive.setPower(.3);
-                                    sleep(1300);
+                                    sleep(350);
+                                    leftFDrive.setPower(.2);
+                                    leftBDrive.setPower(.2);
+                                    sleep(1500);
                                     rightFDrive.setPower(0);
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
@@ -207,7 +241,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     sleep(1200);
                                     rightFDrive.setPower(.3);
                                     rightBDrive.setPower(.3);
-                                    sleep(800);
+                                    sleep(900);
                                     rightFDrive.setPower(0);
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
@@ -291,32 +325,32 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                 }
 
                             }
-//                        } else{//moving forward after 4 attempts of object detection.
-//                            telemetry.addData("Gold Mineral Position", "Not Found; Going Forward");
-//                            sleep(2000);
-//                            leftFDrive.setPower(.31);
-//                            leftBDrive.setPower(.31);
-//                            rightFDrive.setPower(.3);
-//                            rightBDrive.setPower(.3);
-//                            hangArm.setPower(1);
-//                            sleep(2000);
-//                            hangArm.setPower(0);
-//                            leftFDrive.setPower(0);
-//                            leftBDrive.setPower(0);
-//                            rightFDrive.setPower(0);
-//                            rightBDrive.setPower(0);
-//                            rightArm.setPosition(.7);
-//                            leftArm.setPosition(.3);
-//                            rightFDrive.setPower(-.5/2);
-//                            rightBDrive.setPower(-.5/2);
-//                            leftFDrive.setPower(-.3/2);
-//                            leftBDrive.setPower(-.3/2);
-//                            sleep(250);
-//                            rightFDrive.setPower(0);
-//                            rightBDrive.setPower(0);
-//                            leftFDrive.setPower(0);
-//                            leftBDrive.setPower(0);
-//                            break;
+                        } else if (counterA >= 500000){//moving forward after 4 attempts of object detection.
+                            telemetry.addData("Gold Mineral Position", "Not Found; Going Forward");
+                            sleep(2000);
+                            leftFDrive.setPower(.31);
+                            leftBDrive.setPower(.31);
+                            rightFDrive.setPower(.3);
+                            rightBDrive.setPower(.3);
+                            hangArm.setPower(1);
+                            sleep(2000);
+                            hangArm.setPower(0);
+                            leftFDrive.setPower(0);
+                            leftBDrive.setPower(0);
+                            rightFDrive.setPower(0);
+                            rightBDrive.setPower(0);
+                            rightArm.setPosition(.7);
+                            leftArm.setPosition(.3);
+                            rightFDrive.setPower(-.5/2);
+                            rightBDrive.setPower(-.5/2);
+                            leftFDrive.setPower(-.3/2);
+                            leftBDrive.setPower(-.3/2);
+                            sleep(250);
+                            rightFDrive.setPower(0);
+                            rightBDrive.setPower(0);
+                            leftFDrive.setPower(0);
+                            leftBDrive.setPower(0);
+                            break;
                         }
                         telemetry.update();
             //            break;
