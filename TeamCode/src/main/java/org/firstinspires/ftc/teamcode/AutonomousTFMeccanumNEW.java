@@ -241,7 +241,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     sleep(1200);
                                     rightFDrive.setPower(.3);
                                     rightBDrive.setPower(.3);
-                                    sleep(900);
+                                    sleep(850);
                                     rightFDrive.setPower(0);
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
@@ -257,14 +257,15 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
                                     leftBDrive.setPower(0);
+                                    break;
 
 
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
                                     leftFDrive.setPower(.3);
                                     leftBDrive.setPower(.3);
-                                    rightFDrive.setPower(-.5);
-                                    rightBDrive.setPower(-.5);
+                                    rightFDrive.setPower(-.6);
+                                    rightBDrive.setPower(-.6);
                                     hangArm.setPower(1);
                                     sleep(100);
                                     rightFDrive.setPower(.3);
@@ -280,7 +281,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     sleep(1200);
                                     leftFDrive.setPower(.3);
                                     leftBDrive.setPower(.3);
-                                    sleep(800);
+                                    sleep(850);
                                     rightFDrive.setPower(0);
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
@@ -296,6 +297,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
                                     leftBDrive.setPower(0);
+                                    break;
 
 
                                 } else {
@@ -322,6 +324,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                                     rightBDrive.setPower(0);
                                     leftFDrive.setPower(0);
                                     leftBDrive.setPower(0);
+                                    break;
                                 }
 
                             }
@@ -355,7 +358,7 @@ public class AutonomousTFMeccanumNEW extends LinearOpMode {
                         telemetry.update();
             //            break;
                     }
-        //            break;
+                   //break;
                 }
             }
         }
