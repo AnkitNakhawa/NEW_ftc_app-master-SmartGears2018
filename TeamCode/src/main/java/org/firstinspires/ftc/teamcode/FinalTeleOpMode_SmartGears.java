@@ -79,10 +79,11 @@ public class FinalTeleOpMode_SmartGears extends LinearOpMode {
     public void mecccanumFinal (){
         //Divider for Left and Right Strafe
        if(gamepad1.right_bumper) {
-           leftFDrive.setPower(1);
            leftBDrive.setPower(-1);
-           rightFDrive.setPower(-1);
+           leftFDrive.setPower(1);
            rightBDrive.setPower(1);
+           rightFDrive.setPower(-1);
+          
        }
         if(gamepad1.left_bumper) {
             leftFDrive.setPower(-1);
@@ -104,6 +105,7 @@ public class FinalTeleOpMode_SmartGears extends LinearOpMode {
             leftFDrive.setPower(-.5);
             rightFDrive.setPower(.5);
             rightFDrive.setPower(.5);
+            
             break;
         }
         while (slowBack) {
