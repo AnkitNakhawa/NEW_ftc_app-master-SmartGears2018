@@ -61,12 +61,18 @@ public class AutonomousFinal_Ankit extends LinearOpMode {
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
+//Split into declarization and initialization for the purpose of more efficient/methodical motor assignment
+     DcMotor leftDrive;
+   DcMotor rightDrive;
+    DcMotor arm;
+    Servo rightClaw;
+    Servo leftClaw;
 
-     DcMotor leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-   DcMotor rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-    DcMotor arm = hardwareMap.get(DcMotor.class, "arm");
-    Servo rightClaw = hardwareMap.get(Servo.class, "right_claw");
-    Servo leftClaw = hardwareMap.get(Servo.class, "left_claw");
+    leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+    rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+    arm = hardwareMap.get(DcMotor.class, "arm");
+    rightClaw = hardwareMap.get(Servo.class, "right_claw");
+    leftClaw = hardwareMap.get(Servo.class, "left_claw");
 
 
     double motorPower = 1;
@@ -166,6 +172,9 @@ public class AutonomousFinal_Ankit extends LinearOpMode {
         }
 
         if (tfod != null) {
+            tfod.shutdown();
+        }
+        while (!opModeIsActive()){
             tfod.shutdown();
         }
     }
